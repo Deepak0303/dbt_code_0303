@@ -1,0 +1,38 @@
+version: 2
+
+models:
+  - name: fct_o2c_rar_reconciliation
+    description: "Order-to-Cash joined with S/4HANA Revenue Accounting milestones."
+    config:
+      meta:
+        row_access_policy:
+          policy: governance.policies.revenue_regional_policy
+          column: company_code
+
+    columns:
+      - name: company_code
+        description: "SAP Company Code (BUKRS), the regional ownership boundary."
+
+      - name: customer_id
+        description: "Masked customer identifier."
+        config:
+          meta:
+            masking_policy: governance.policies.mask_customer_id
+            tag_name: governance.policies.data_privacy_level
+            tag_value: CONFIDENTIAL
+
+      - name: recognized_revenue_usd
+        description: "Masked USD revenue."
+        config:
+          meta:
+            masking_policy: governance.policies.mask_financial_value
+            tag_name: governance.policies.data_privacy_level
+            tag_value: RESTRICTED_FINANCIAL
+
+      - name: sales_order_open_amount_usd
+        description: "Masked open booking value."
+        config:
+          meta:
+            masking_policy: governance.policies.mask_financial_value
+            tag_name: governance.policies.data_privacy_level
+            tag_value: RESTRICTED_FINANCIAL
